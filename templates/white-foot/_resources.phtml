@@ -1,0 +1,11 @@
+<h2 class="title">Available Endpoints</h2>
+<div class="section-content">
+    <ul>
+        <?php foreach ($RAML->path()->getChildren() as $abspath => $endpoint) { ?>
+            <li>
+                    <a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $abspath; ?>"><?php echo $endpoint; ?></a>
+                    <?php echo RAML2HTML\markdown::clean($RAML->getPathObject($abspath)->get('description')); ?>
+            </li>
+        <?php } ?>
+    </ul>
+</div>

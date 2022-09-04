@@ -1,0 +1,377 @@
+<!---
+<html>
+	<head>
+
+
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
+
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				hljs.configure({useBR: true});
+
+				$('code, div.apiresponse').each(function(i, block) {
+				  hljs.highlightBlock(block);
+				});
+			});
+		</script>
+
+		<style type="text/css">
+
+			*, *:before, *:after {
+			  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+			}
+
+			body { margin: 0; }
+
+			body, table {
+				margin: 0;
+				font-family: arial;
+				font-size: 12px;
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			h3 {
+				margin-top: 40px;
+			}
+
+			header {
+				padding: 10px 20px;
+				background: #333;
+				color: #fff;
+				border-bottom: 2px solid #999;
+			}
+
+			header a {
+				color: #fff;
+			}
+
+			#container { position: relative; }
+
+			article {
+				margin: 0 20px;
+			}
+
+			nav {
+				border-left: 1px dashed #999;
+				padding: 0 15px;
+			}
+
+			footer {
+				clear: both;
+				margin-top: 30px;
+				padding: 10px 20px;
+				text-align: center;
+				font-size: 10px;
+				background: #333;
+				color: #999;
+				border-top: 2px solid #999;
+			}
+
+			footer a {
+				color: #ccc;
+			}
+
+			.alert, .info, .warning {
+				width: 96%;
+				margin: 0;
+				padding: 8px 15px;
+				border: 2px solid #075698;
+				background: #AEEAFF;
+				color: #333;
+				font-weight: bold;
+			}
+
+			.warning {
+				border-color: #f3961c;
+				background: #FFE5B4;
+			}
+
+			.alert {
+				border-color: #900;
+				background: #DC381F;
+				color: #fff;
+			}
+
+			table {
+				width: 96%;
+				border: 1px solid #333;
+			}
+
+			table thead tr td {
+				background: #666;
+				color: #fff;
+				font-weight: bold;
+			}
+
+			table tr {
+				padding: 15px 0;
+			}
+
+			tr:nth-child(odd) {
+			    background-color: #f3f3f3;
+			}
+
+			table td {
+				vertical-align: top;
+				padding: 5px;
+			}
+
+
+
+
+
+
+		    nav ul li a {
+		    	display: block;
+		    	padding: 0 0 10px 0;
+		    	margin: 0 0 10px 0;
+		    	border-bottom: 1px dotted #ccc;
+		    	font-size: 14px;
+		    	color: #666;
+		    }
+
+		    nav ul li a:hover {
+		    	font-weight: bold;
+		    }
+
+		    div.apiresponse, code {
+		    	width: 96%;
+		    	max-height: 300px;
+		    	background: #f3f3f3;
+		    	border: 1px solid #333;
+		    	padding: 10px;
+		    	overflow: scroll;
+		    	font-family: monospace;
+		    	font-size: 11px;
+		    }
+
+			@media screen and (min-width: 60em ) {
+			  nav { float: right; top: 0; right: 0; width: 30em; }
+			  article { margin-right: 30.75em; }
+
+
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+		<header>
+			<h1><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo $RAML->get('title'); ?></a></h1>
+			<p>version <?php echo $RAML->get('version'); ?> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <?php echo $RAML->get('baseUri'); ?></p>
+		</header>
+
+
+		<div id="container">
+
+			<nav>
+				<?php
+				include('_menu.phtml');
+				?>
+			</nav>
+
+			<article>
+				<?php if ($RAML->getCurrentPath() != '/'): ?>
+					<h2><?php echo $RAML->getCurrentPath(); ?></h2>
+				<?php elseif (!$RAML->path()->description): ?>
+					<!-- CSS HACK --><img width="1" height="1" />
+				<?php endif; ?>
+
+
+				<?php $validPath = $RAML->isPathValid($RAML->getCurrentPath()); ?>
+
+
+				<?php if($validPath && !$RAML->getCurrentAction() && $RAML->path()->description):
+					echo RAML2HTML\markdown::parse($RAML->path()->description);
+				endif; ?>
+
+
+				<?php
+				if (!$validPath):
+					include('_404.phtml');
+				endif;
+				?>
+
+
+				<?php
+				if ($validPath && $RAML->path()->getVerbs() && !$RAML->getCurrentAction()):
+					include('_verbs.phtml');
+				endif;
+				?>
+
+
+
+				<?php
+				if ($validPath && $RAML->getChildPaths($RAML->getCurrentPath()) && !$RAML->getCurrentAction()):
+					include('_resources.phtml');
+				endif;
+				?>
+
+
+				<?php
+				if ($RAML->getCurrentAction()):
+					include('_action.phtml');
+					if ($disqus && $disqus_shortname):
+ 						include('_comments.phtml');
+					endif;
+				endif;
+				?>
+
+
+			</article>
+
+			<div style="clear: both;"></div>
+
+		</div>
+
+		<footer>
+			powered by <a href="http://www.raml.org">RAML</a> &nbsp; &nbsp; | &nbsp; &nbsp; script by <a href="http://www.mikestowe.com/2014/05/raml-2-html.php" target="_blank">MikeStowe.com</a>
+		</footer>
+	</body>
+</html>
+
+---->
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <title><?php echo $RAML->title; ?>: <?php echo $RAML->getCurrentPath(); ?></title>
+    <meta charset="utf-8">
+    <base url="https://localhost">
+
+    <meta name="description" content="">
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="shortcut icon" href="img/favicon.png"> -->
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet'>
+
+    <!-- Syntax Highlighter -->
+    <link rel="stylesheet" type="text/css" href="/templates/white-foot/syntax-highlighter/styles/shCore.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/templates/white-foot/syntax-highlighter/styles/shThemeDefault.css" media="all">
+
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="/templates/white-foot/css/font-awesome.min.css">
+    <!-- Normalize/Reset CSS-->
+    <link rel="stylesheet" href="/templates/white-foot/css/normalize.min.css">
+    <!-- Main CSS-->
+    <link rel="stylesheet" href="/templates/white-foot/css/main.css">
+
+    <style>
+
+    </style>
+</head>
+
+<body id="welcome">
+
+<aside class="left-sidebar">
+    <div class="logo">
+        <h1><a href="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <img src="/templates/white-foot/img/logo.png" alt="">&nbsp;<?php echo $RAML->get('title'); ?></a>
+        </a></h1>
+        <p>version <?php echo $RAML->get('version'); ?> <br> <?php echo $RAML->get('baseUri'); ?></p>
+        <h4>
+            Server Status:
+            <?php
+            $status = $RAML->pingStatus();
+            if ($status == 'online'): ?>
+                <span class="online">Online</span>
+            <?php else: ?>
+                <span class="offline">Offline</span>
+            <?php endif; ?>
+
+        </h4>
+    </div>
+    <nav class="left-nav">
+        <?php
+        include('_menu.phtml');
+        ?>
+
+    </nav>
+</aside>
+
+<div id="main-wrapper">
+    <div class="main-content">
+        <section id="article">
+
+            <?php if ($RAML->getCurrentPath() != '/'): ?>
+                <div class="content-header">
+                    <h2><?php echo $RAML->getCurrentPath(); ?></h2>
+                </div>
+
+            <?php elseif (!$RAML->path()->description): ?>
+                <!-- CSS HACK --><img width="1" height="1" />
+            <?php endif; ?>
+
+
+            <?php $validPath = $RAML->isPathValid($RAML->getCurrentPath()); ?>
+
+
+            <?php if($validPath && !$RAML->getCurrentAction() && $RAML->path()->description):
+                echo RAML2HTML\markdown::parse($RAML->path()->description);
+            endif; ?>
+
+
+            <?php
+            if (!$validPath):
+                include('_404.phtml');
+            endif;
+            ?>
+
+
+            <?php
+            if ($validPath && $RAML->path()->getVerbs() && !$RAML->getCurrentAction()):
+                include('_verbs.phtml');
+            endif;
+            ?>
+
+
+
+            <?php
+            if ($validPath && $RAML->getChildPaths($RAML->getCurrentPath()) && !$RAML->getCurrentAction()):
+                include('_resources.phtml');
+            endif;
+            ?>
+
+
+            <?php
+            if ($RAML->getCurrentAction()):
+                include('_action.phtml');
+                if ($disqus && $disqus_shortname):
+                    include('_comments.phtml');
+                endif;
+            endif;
+            ?>
+
+        </section>
+
+    </div>
+</div>
+
+
+<!-- Essential JavaScript Libraries
+==============================================-->
+<script type="text/javascript" src="/templates/white-foot/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="/templates/white-foot/js/jquery.nav.js"></script>
+<script type="text/javascript" src="/templates/white-foot/syntax-highlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="/templates/white-foot/syntax-highlighter/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="/templates/white-foot/syntax-highlighter/scripts/shBrushCss.js"></script>
+<script type="text/javascript" src="/templates/white-foot/syntax-highlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="/templates/white-foot/syntax-highlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript">
+    SyntaxHighlighter.all()
+</script>
+<script type="text/javascript" src="/templates/white-foot/js/custom.js"></script>
+
+</body>
+</html>

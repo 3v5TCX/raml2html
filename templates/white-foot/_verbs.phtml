@@ -1,0 +1,11 @@
+<h2 class="title">Available Actions</h2>
+<div class="section-content">
+
+        <?php foreach ($RAML->path()->getVerbs() as $verb) { ?>
+            <p>
+                <a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $RAML->getCurrentPath(); ?>&action=<?php echo $verb; ?>" class="badge badge_<?php echo $verb; ?>"><?php echo $verb; ?></a>
+                <?php echo RAML2HTML\markdown::clean($RAML->path()->get($verb)->get('description')); ?>
+            </p>
+        <?php } ?>
+
+</div>
