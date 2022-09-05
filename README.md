@@ -1,8 +1,8 @@
 # RAML 2 HTML for PHP
-
+#### "White-foot" theme from <a href="belonogov.com">https://belonogov.com</a>
 RAML 2 HTML for PHP is a simple application that makes use of multiple templates to allow you to build and customize your API Docs using RAML.
 
-![Screenshot](http://www.mikestowe.com/wp-content/uploads/2014/05/raml2html.png?v=1)
+![Screenshot](/templates/white-foot/img/screen.png)
 
 #### What all does RAML 2 HTML for PHP do?
 RAML 2 HTML for PHP builds out a multi-page documentation site for you based on your RAML spec.  This lets users explore and understand how your API works, while letting you style the documentation (within the RAML spec) using HTML or markdown, and provide your users with automatically generated code samples while also letting you include community and commenting functionality within your documentation via Disqus.

@@ -19,68 +19,55 @@
 		<?php
 		foreach ($RAML->action()->get('queryParameters')->toArray() as $param => $details) {
 		?>
-
 			<tr>
 				<td><?php echo $param; ?></td>
-                <td><?php echo $details['type']; ?></td>
+                <td><?php if (isset($details['type'])) echo $details['type']; ?></td>
                 <td><?php echo (isset($details['required']) && $details['required'] == 1 ? 'Yes' : ''); ?></td>
                 <td><?php if (isset($details['description']) ) echo $details['description']; ?><?php echo (isset($details['example']) ? '<span style="display: block; margin: 6px 0 8px 0; border-top: 1px solid #aaa; color: #666; padding: 4px; font-size: 10px;"><b>Example:</b> ' . $details['example'] . '</span>' : ''); ?></td>
 			</tr>
-
 		<?php } ?>
-
 	</table>
 <?php endif; ?>
 
 
 <?php if ($RAML->action()->get('body')->get('application/x-www-form-urlencoded')->get('formParameters')->isArray()): ?>
-<h2 class="title">Form Parameters</h2>
-<table>
-	<thead>
-		<tr>
-			<td>Parameter</td><td>Type</td><td>Required</td><td>Description</td>
-		</tr>
-	</thead>
-	
-	<?php
-	foreach ($RAML->action()->get('body')->get('application/x-www-form-urlencoded')->get('formParameters')->toArray() as $param => $details) {
-	?>
-	
-		<tr>
-			<td><?php echo $param; ?></td><td><?php echo $details['type']; ?></td><td><?php echo (isset($details['required']) && $details['required'] == 1 ? 'Yes' : ''); ?></td><td><?php echo $details['description']; ?><?php echo (isset($details['example']) ? '<span style="display: block; margin: 6px 0 8px 0; border-top: 1px solid #aaa; color: #666; padding: 4px; font-size: 10px;"><b>Example:</b> ' . $details['example'] . '</span>' : ''); ?></td>
-		</tr>
-		
-	<?php } ?>
-	
-</table>
+    <h2 class="title">Form Parameters</h2>
+    <table class="table" >
+        <tr style="background: #d8d8d8;"><td width="10%"><b>Parameter</b></td><td width="10%"><b>Type</b></td><td width="10%"><b>Required</b></td><td width="70%"><b>Description</b></td></tr>
+        <?php
+        foreach ($RAML->action()->get('body')->get('application/x-www-form-urlencoded')->get('formParameters')->toArray() as $param => $details) {
+        ?>
+            <tr>
+                <td><?php echo $param; ?></td>
+                <td><?php if (isset($details['type'])) echo $details['type']; ?></td>
+                <td><?php echo (isset($details['required']) && $details['required'] == 1 ? 'Yes' : ''); ?></td>
+                <td><?php if (isset($details['description']) ) echo $details['description']; ?><?php echo (isset($details['example']) ? '<span style="display: block; margin: 6px 0 8px 0; border-top: 1px solid #aaa; color: #666; padding: 4px; font-size: 10px;"><b>Example:</b> ' . $details['example'] . '</span>' : ''); ?></td>
+            </tr>
+        <?php } ?>
+    </table>
 <?php endif; ?>
 
 
 <?php if ($RAML->action()->get('body')->get('application/json')->get('schema')->get('properties')->isArray()): ?>
-<h2 class="title">JSON Parameters</h2>
-<table>
-	<thead>
-		<tr>
-			<td>Parameter</td><td>Type</td><td>Required</td><td>Description</td>
-		</tr>
-	</thead>
+    <h2 class="title">JSON Parameters</h2>
+    <table class="table" >
+        <tr style="background: #d8d8d8;"><td width="10%"><b>Parameter</b></td><td width="10%"><b>Type</b></td><td width="10%"><b>Required</b></td><td width="70%"><b>Description</b></td></tr>
 	
-	<?php
-	$tmp = $RAML->action()->get('body')->get('application/json')->get('schema')->toArray();
-	if ($RAML->action()->get('body')->get('application/json')->get('schema')->isString()) {
-		$tmp = json_decode($RAML->action()->get('body')->get('application/json')->get('schema')->toString(), true);
-	}
-	
-	foreach ($tmp['properties'] as $param => $details) {
-	?>
-	
-		<tr>
-			<td><?php echo $param; ?></td><td><?php echo $details['type']; ?></td><td><?php echo (isset($details['required']) && $details['required'] == 1 ? 'Yes' : ''); ?></td><td><?php echo $details['description']; ?><?php echo (isset($details['example']) ? '<span style="display: block; margin: 6px 0 8px 0; border-top: 1px solid #aaa; color: #666; padding: 4px; font-size: 10px;"><b>Example:</b> ' . $details['example'] . '</span>' : ''); ?></td>
-		</tr>
-		
-	<?php } ?>
-	
-</table>
+        <?php
+        $tmp = $RAML->action()->get('body')->get('application/json')->get('schema')->toArray();
+        if ($RAML->action()->get('body')->get('application/json')->get('schema')->isString()) {
+            $tmp = json_decode($RAML->action()->get('body')->get('application/json')->get('schema')->toString(), true);
+        }
+	    foreach ($tmp['properties'] as $param => $details) {
+	    ?>
+            <tr>
+                <td><?php echo $param; ?></td>
+                <td><?php if (isset($details['type'])) echo $details['type']; ?></td>
+                <td><?php echo (isset($details['required']) && $details['required'] == 1 ? 'Yes' : ''); ?></td>
+                <td><?php if (isset($details['description']) ) echo $details['description']; ?><?php echo (isset($details['example']) ? '<span style="display: block; margin: 6px 0 8px 0; border-top: 1px solid #aaa; color: #666; padding: 4px; font-size: 10px;"><b>Example:</b> ' . $details['example'] . '</span>' : ''); ?></td>
+            </tr>
+	    <?php } ?>
+    </table>
 <?php endif; ?>
 
 
@@ -89,9 +76,9 @@
 <a href="javascript:void(0);" onclick="switchCodeSample('codeSamplesPHP','codeSampleLinkPHP');" id="codeSampleLinkPHP" class="codeSampleLink">PHP</a>
 <a href="javascript:void(0);" onclick="switchCodeSample('codeSamplesRails','codeSampleLinkRails');" id="codeSampleLinkRails" class="codeSampleLink">Rails</a>
 
-<pre class="codeSample brush: javascript" id="codeSamplesJS"><?php echo $codeSamples->javascript(); ?></pre>
-<pre class="codeSample brush: php" id="codeSamplesPHP"><?php echo $codeSamples->php(); ?></pre>
-<pre class="codeSample brush: javascript" id="codeSamplesRails"><?php echo $codeSamples->rails(); ?></pre>
+    <div class="codeSample" id="codeSamplesJS"><pre class="brush: javascript"><?php echo $codeSamples->javascript(); ?></pre></div>
+    <div class="codeSample" id="codeSamplesPHP"><pre class=" brush: php"><?php echo $codeSamples->php(); ?></pre></div>
+    <div class="codeSample" id="codeSamplesRails"><pre class="brush: javascript"><?php echo $codeSamples->rails(); ?></pre></div>
 
 <script language="javascript">
 	$('#codeSampleLinkJS').addClass('activeCodeSample');
@@ -121,9 +108,9 @@
 			
 			if (isset($response['example'])):
 	?>
-	<div class="apiresponse">
-        <pre class="codeSample brush: javascript"><?php echo $response['example']; ?></pre>
-	</div>
+
+        <pre class="brush: javascript"><?php echo $response['example']; ?></pre>
+
 	<?php endif; ?>
 	<p>&nbsp;</p>
 	<?php
